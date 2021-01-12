@@ -621,8 +621,11 @@ class ReportJournalLedger(models.TransientModel):
         cls = type(self)
         if not force and (cls._transient_check_count < 21):
             return True  # no vacuum cleaning this time
+        self.env.cr.execute("DELETE FROM report_journal_ledger_report_tax_line")
         self.env.cr.execute("DELETE FROM report_journal_ledger_move_line")
+        self.env.cr.execute("DELETE FROM report_journal_ledger_journal_tax_line")
         self.env.cr.execute("DELETE FROM report_journal_ledger_move")
+        self.env.cr.execute("DELETE FROM report_journal_ledger_journal")
         return super(ReportJournalLedger, self)._transient_vacuum(force=force)
 
 
